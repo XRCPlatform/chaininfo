@@ -87,16 +87,8 @@ All supported chains should be located within the "docker" folder. Navigate to e
 Here is how you can run both indexer and explorer at the same time:
 
 ```sh
-sudo docker-compose -f indexer.yml -f explorer.yml up -d
+sudo docker-compose up -d
 ``` 
-
-Due to the way custom network is setup for the node and indexer, you need to connect the proxy with the custom networks. You do this, after you have run/started the individual proxies:
-
-```sh
-sudo docker network connect city-network blockcore-proxy
-sudo docker network connect city_default_ blockcore-proxy
-```
-
 
 ### Local Image Dependency (Optional)
 
@@ -123,6 +115,16 @@ Additionally you would need to modify the startup parameters for the explorer to
 sudo docker system prune -a
 ```
 
+## Hosting Web Wallet
+
+The wallet can run in multiple different modes, one of them is web (Progressive Web App, PWA). There are security and privacy risks by allowing users to run their wallet directly in the web browser.
+
+The hosted web wallet will attempt to enforce users to run as installed PWA, instead of directly in browser. This can potentially increase security.
+
+```sh
+cd docker/BLOCKCORE/WALLET
+sudo sh ./wallet.sh 0.0.28
+```
 
 ## Debugging network issues
 
@@ -161,9 +163,17 @@ sudo docker network connect x42_default proxy
 sudo docker network connect xds_default proxy
 sudo docker network connect xlr_default proxy
 sudo docker network connect implx_default proxy
-sudo docker network connect x1_default proxy
 sudo docker network connect xrc_default proxy
 sudo docker network connect home_default proxy
+sudo docker network connect serf_default proxy
+sudo docker network connect crs_default proxy
+sudo docker network connect tcrs_default proxy
+sudo docker network connect rsc_default proxy
+sudo docker network connect sbc_default proxy
+sudo docker network connect tstrax_default proxy
+sudo docker network connect strax_default proxy
+sudo docker network connect coinvault_default proxy
+sudo docker network connect cybits_default proxy
 ```
 
 If you host the paperwallet, you'll also need:
@@ -249,14 +259,12 @@ sudo docker info
 
 3. Limit a Container's Memory Access
 
-Set the "mem_limit" option in the docker-compose (v2.x) file and specifically for MongoDB, specify the wiredTigerCacheSizeGB argument.
+Set the `deploy.resources.limits` options in the docker-compose (v2.x) file and specifically for all the services.
 
 ```
   mongo:
     container_name: xlr-mongo
-    image: mongo:3.6.18
-    command: "--wiredTigerCacheSizeGB 0.25"
-    mem_limit: 250m
+    image: mongo:5.0.5
 ```
 
 4. Verify
@@ -289,3 +297,131 @@ CITY/BWS/
 ```
 sudo docker-compose up -d
 ```
+
+
+# Debugging
+
+## MongoDB - Database corruption
+
+You can run the following command to repair corrupted database for bws-mongo:
+
+```sh
+docker run -it -v /var/lib/docker/volumes/city-bws-db/_data:/data/db -v /var/lib/docker/volumes/city-bws-db/_data:/data/configdb mongo:3.6.18 mongod --repair
+```
+
+## Backups
+
+```sh
+sudo cp -a /var/lib/docker/volumes/city-bws-db /home/blockcore/backup/docker/city-bws-db
+```
+
+## Top processes
+
+```sh
+sudo ps aux --sort -rss | head -10
+```
+
+
+# Logging
+
+If left to run with default logging enabled, the containers will eventually use all available disk space for logging.
+
+Ensure you configure your daemon.json to keep log files in check:
+
+https://docs.docker.com/config/containers/logging/json-file/
+
+
+## System Wide Configuration
+Configure ```/etc/docker/``` on Linux hosts or ```C:\ProgramData\docker\config\``` on Windows Servers.
+
+```
+{
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "10m",
+    "max-file": "3" 
+  }
+}
+```
+For the new configuration to take effect:
+
+* Stop all Containers
+* Restart the docker daemon
+* Recreate the containers 
+
+
+## Container Specific Configuration
+
+Modify the file ```docker\<CHAIN>\docker-compose.yml``` and include the ```logging``` section as per example:
+```
+ chain:
+    container_name: btc-chain
+    mem_limit: 6000m
+    image: blockcore/node-multi:1.1.41
+    logging:
+        driver: "json-file"
+        options:
+            max-file: 5
+            max-size: 10m
+    .
+    .
+    .
+```
+Options:
+* ``` max-size ``` - The maximum size of the log before it is rolled. A positive integer plus a modifier representing the unit of measure (k, m, or g)
+* ``` max-file ``` - The maximum number of log files that can be present. If rolling the logs creates excess files, the oldest file is removed. Only effective when max-size is also set. A positive integer
+
+## 10 largest files
+
+```
+# Available space:
+df -h
+```
+
+```
+du -a /var | sort -n -r | head -n 10
+```
+
+```
+find . -type f -printf '%s %p\n'| sort -nr | head -10
+```
+
+# mssql tipbot database restarts
+
+The mssql container can get into trouble with the lock file.
+
+When that happens, the container keeps restarting and the log says:
+
+```sh
+sudo docker logs -t --tail 1000 city-tipbot-db
+```
+
+```
+2022-01-03T04:24:58.094242967Z 
+2022-01-03T04:25:58.518057048Z SQL Server 2019 will run as non-root by default.
+2022-01-03T04:25:58.518070343Z This container is running as user mssql.
+2022-01-03T04:25:58.518072594Z Your master database file is owned by mssql.
+2022-01-03T04:25:58.518074227Z To learn more visit https://go.microsoft.com/fwlink/?linkid=2099216.
+2022-01-03T04:25:58.739964034Z sqlservr: Unable to read instance id from /var/opt/mssql/.system/instance_id: No such file or directory (2)
+2022-01-03T04:25:58.740007717Z /opt/mssql/bin/sqlservr: PAL initialization failed. Error: 101
+2022-01-03T04:25:58.740012125Z
+```
+
+This can be fixed by renaming the lock file:
+
+```
+# Stop the container
+sudo docker stop city-tipbot-db
+
+# Inspect to find volume path:
+sudo docker inspect city-tipbot-db
+
+# Navigate to:
+cd /var/lib/docker/volumes/city-tipbot-db/_data/.system
+
+# Move the file
+mv instance_id instance_id.bak
+
+sudo docker start city-tipbot-db
+```
+

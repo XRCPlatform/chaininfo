@@ -18,7 +18,7 @@
     "APIPort": 37220
   },
   "Indexer": {
-    "StoreRawTransactions": false,
+    "StoreRawTransactions": true,
     "MaxItemsInQueue": 1000,
     "SyncInterval": 2
   },
@@ -36,8 +36,8 @@
  },
   "Explorer": {
     "Indexer": {
-      "ApiUrl": "https://btc.indexer.blockcore.net/api",
-      "DocUrl": "https://btc.indexer.blockcore.net/docs"
+      "ApiUrl": "https://btc.indexer.coinvault.io/api",
+      "DocUrl": "https://btc.indexer.coinvault.io/docs"
     },
     "Currency": {
       "ApiUrl": "https://api.coincap.io/v2/rates",

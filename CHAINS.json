@@ -5,9 +5,19 @@
       "icon": "https://chains.blockcore.net/assets/BTC/icon.png"
    },
    {
+      "name": "Cirrus",
+      "symbol": "CRS",
+      "icon": "https://chains.blockcore.net/assets/CRS/icon.png"
+   },
+   {
       "name": "City Chain",
       "symbol": "CITY",
       "icon": "https://chains.blockcore.net/assets/CITY/icon.png"
+   },
+   {
+      "name": "HomeCoin",
+      "symbol": "HOME",
+      "icon": "https://chains.blockcore.net/assets/HOME/icon.png"
    },
    {
       "name": "Impleum",
@@ -20,9 +30,24 @@
       "icon": "https://chains.blockcore.net/assets/EXOS/icon.png"
    },
    {
+      "name": "Royal",
+      "symbol": "RSC",
+      "icon": "https://chains.blockcore.net/assets/RSC/icon.png"
+   },
+   {
       "name": "Rutanio",
       "symbol": "RUTA",
       "icon": "https://chains.blockcore.net/assets/RUTA/icon.png"
+   },
+   {
+      "name": "Senior",
+      "symbol": "SBC",
+      "icon": "https://chains.blockcore.net/assets/SBC/icon.png"
+   },
+   {
+      "name": "SERF",
+      "symbol": "SERF",
+      "icon": "https://chains.blockcore.net/assets/SERF/icon.png"
    },
    {
       "name": "Solaris",
@@ -31,8 +56,13 @@
    },
    {
       "name": "Stratis",
-      "symbol": "STRAT",
-      "icon": "https://chains.blockcore.net/assets/STRAT/icon.png"
+      "symbol": "STRAX",
+      "icon": "https://chains.blockcore.net/assets/STRAX/icon.png"
+   },
+   {
+      "name": "Stratis-test",
+      "symbol": "TSTRAX",
+      "icon": "https://chains.blockcore.net/assets/STRAX/icon.png"
    },
    {
       "name": "XDS",
@@ -47,18 +77,8 @@
       "filter": true
    },
    {
-      "name": "X1",
-      "symbol": "X1",
-      "icon": "https://chains.blockcore.net/assets/X1/icon.png"
-   },
-   {
       "name": "xRhodium",
       "symbol": "XRC",
       "icon": "https://chains.blockcore.net/assets/XRC/icon.png"
-   },
-   {
-      "name": "HomeCoin",
-      "symbol": "HOME",
-      "icon": "https://chains.blockcore.net/assets/HOME/icon.png"
    }
 ]

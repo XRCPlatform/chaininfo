@@ -1,12 +1,12 @@
 {
   "Chain": {
-    "Name": "X1",
-    "Symbol": "X1",
+    "Name": "SERF",
+    "Symbol": "SERF",
     "Description": "",
-    "Url": "",
-    "Logo": "https://chains.blockcore.net/assets/X1/logo.png",
-    "Icon": "https://chains.blockcore.net/assets/X1/icon.png",
-    "Color": "#650081"
+    "Url": "https://www.serfnet.info/",
+    "Logo": "https://chains.blockcore.net/assets/SERF/logo.png",
+    "Icon": "https://chains.blockcore.net/assets/SERF/icon.png",
+    "Color": "#01a75d"
   },
   "TipBot": {
     "Discord": {
@@ -23,31 +23,34 @@
     "Reddit": {
       "Enabled": false
     },
-    "Ticker": "X1",
+    "Ticker": "SERF",
     "NetworkFee": "0.00100000",
-    "ApiUrl": "http://x1-tipbot-chain:39220/",
+    "ApiUrl": "http://serf-tipbot-chain:15113/",
     "UseSegwit": false,
     "SupportUsername": "sondreb",
     "SupportDiscriminator": "5919",
-    "BotOptionalPrefix": "tipbot-x1",
+    "BotOptionalPrefix": "tipbot-serf",
     "MinConfirmationsForDeposit": 6
   },
   "Network": {
     "NetworkConsensusFactoryType": "Blockcore.Consensus.BlockInfo.PosConsensusFactory, Blockcore",
-    "NetworkType": "Blockcore.Networks.X1.X1Main, Blockcore.Networks.X1",
-    "NetworkPubkeyAddressPrefix": 0,
-    "NetworkScriptAddressPrefix": 128,
-    "NetworkWitnessPrefix": "x1",
-    "P2PPort": 23333,
-    "RPCPort": 43333,
-    "APIPort": 43334
+    "NetworkType": "Blockcore.Networks.SERF.SERFMain, Blockcore.Networks.SERF",
+    "NetworkPubkeyAddressPrefix": 63,
+    "NetworkScriptAddressPrefix": 110,
+    "NetworkWitnessPrefix": "serf",
+    "P2PPort": 15111,
+    "RPCPort": 15112,
+    "APIPort": 15113
   },
   "Indexer": {
     "StoreRawTransactions": true
   },
   "Insight": {
     "Rewards": [
-  
+      {
+        "Height": 0,
+        "Reward": 10
+     }
     ],
     "Wallets": [
        {
@@ -59,8 +62,8 @@
  },
   "Explorer": {
     "Indexer": {
-      "ApiUrl": "https://x1.indexer.blockcore.net/api",
-      "DocUrl": "https://x1.indexer.blockcore.net/docs"
+      "ApiUrl": "https://serf.indexer.blockcore.net/api",
+      "DocUrl": "https://serf.indexer.blockcore.net/docs"
     },
     "Currency": {
       "ApiUrl": "",
@@ -74,16 +77,21 @@
       "IsBitcoinPrice": true
     },
     "Setup": {
-      "Title": "X1 Explorer",
-      "Footer": "",
+      "Title": "SERF",
+      "Footer": "SERF",
       "Links": [
         {
           "icon": "fab fa-github",
           "url": "https://github.com/block-core"
+        },
+        {
+          "icon": "fas fa-link",
+          "url": "https://www.serfnet.info/"
         }
       ]
     },
     "Features": {
+      "Ticker": false,
       "POSWeight": false
     }
   }
